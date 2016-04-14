@@ -21,8 +21,14 @@ class AclPlugin extends AbstractPlugin{
         }
         return $this->role;
     }
-    public function configAcl(){
+    public function configAcl() {
          $acl=new Acl;
+//         $db=$this->getController()->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
+//                            $tb = new \Zend\Db\TableGateway\TableGateway('privilege',$db);
+//                            $privilege = new \Training\Model\PrivilegeTable($tb);
+                           
+                           // $rs = $privilege->isAllowed(2, 'training', 'user', 'index');
+
         $acl->deny();//chan het tat ca nhom quyen
         $acl->addRole(new Role('guest'));
         $acl->addRole(new Role('member'), array('guest'));//member kee thua quyen tu guest
@@ -39,7 +45,7 @@ class AclPlugin extends AbstractPlugin{
         
          $acl->allow('guest','training:verify',array('index','login','denied'));
          $acl->allow('member','training:verify');
-         $acl->allow('member','training:user',array('index','edit','del','access'));
+         $acl->allow('member','training:user',array('index','add','del','access'));
          $acl->allow('admin');
 
          $role=$this->getAuthService();
@@ -50,6 +56,7 @@ class AclPlugin extends AbstractPlugin{
         $acl=$this->configAcl();
           $route=$e->getRouteMatch();
         $controller=$route->getParam('controller');
+        
         $moduleName= strtolower(substr($controller, 0,  strpos($controller, '\\')));
         $arr =  explode('\\', $controller);
         $controllerName= strtolower(array_pop($arr));
@@ -63,4 +70,5 @@ class AclPlugin extends AbstractPlugin{
 			}
 		}
     }
+
 }
