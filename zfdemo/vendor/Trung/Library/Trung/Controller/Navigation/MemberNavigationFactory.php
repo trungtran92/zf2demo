@@ -11,20 +11,20 @@ class MemberNavigationFactory extends DefaultNavigationFactory{
 		 $auth=$sm->get('AuthService');
 		 $userData=$auth->getStorage()->read(); //thong tin user
 		 $config=$sm->get('config');
+		 if(!empty($userData)){
+		 	$label="Logout (".$userData['username'].")";
+		 }else{
+		 	$label="Logout";
+		 }
+		 $config['navigation'][$this->getName()][]=array(
+		 		'label' => $label,
+		 		'route' => 'training/verify',
+		 		'action' => 'logout'
+		 	);
 		 $app= $sm->get('Application');
 		 $routeMatch=$app->getMvcEvent()->getRouteMatch();
 		 $router=$app->getMvcEvent()->getRouter();
-    		 $pages=$this->getPagesFromConfig($config['navigation'][$this->getName()]);
-//                 foreach ($pages as $k=>$item){
-//                     if($item['pages']){
-//                     echo "<pre>";  
-//                        var_dump($item['pages']);
-//                        $pages=$this->getPagesFromConfig($config['navigation'][$this->getName()][$item['pages']]);
-//                 }
-//                 }
-                 //$pages=$this->getPagesFromConfig($config['navigation'][$this->getName()]);
-//                 echo "<pre>";
-//                 var_dump($pages);
+		 $pages=$this->getPagesFromConfig($config['navigation'][$this->getName()]);
 		 $this->pages=$this->injectComponents($pages,$routeMatch,$router);
           
           
